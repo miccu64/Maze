@@ -1,7 +1,5 @@
 package com.javamaze.maze;
 
-
-
 import java.util.Random;
 
 public class MakeMaze {
