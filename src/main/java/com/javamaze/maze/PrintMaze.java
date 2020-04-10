@@ -35,7 +35,7 @@ public class PrintMaze {
         }
     }
 
-    void PrintJustNumbers(int[][] maze) {
+    public void PrintJustNumbers(int[][] maze) {
         int cols=maze.length;
         int rows=maze[0].length;
         System.out.print("\n\n");
@@ -47,10 +47,19 @@ public class PrintMaze {
         }
     }
     
-    void SaveAsImage(int[][] maze)
+    private Graphics2D Block(Graphics2D g, int x, int y, boolean vert)
     {
-        int width=maze.length;
-        int height=maze[0].length;
+        g.setColor(Color.white);
+        if (vert)//add vertical block
+            g.fillRect(x, y, 2, 16);
+        else g.fillRect(x, y, 16, 2);//add horizontal block
+        return g;
+    }
+    
+    public void SaveAsImage(int[][] maze)
+    {
+        int width=maze.length*16;
+        int height=maze[0].length*16;
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graph = image.createGraphics();//graphics to draw in buffered image
         
@@ -59,6 +68,16 @@ public class PrintMaze {
         graph.fillRect(0, 0, width, height);
         
         //TODO: print maze
+        //dziura 14 px
+        //klocek 16x2 px
+        for (int y=0; y<height; y=y+16)
+        {
+            for (int x=0; x<width; x=x+16)
+            {
+                //HEREEEE
+            }
+        }
+        
         
         
         graph.dispose();//release resources
