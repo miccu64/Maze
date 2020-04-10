@@ -1,7 +1,5 @@
 package com.javamaze.maze;
 
-
-
 public class PrintMaze {
     public void PrintInConsole(int[][] maze, int rows, int cols) {
         System.out.print(" ");
