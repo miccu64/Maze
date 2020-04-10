@@ -7,8 +7,9 @@ public class Main {
         int rows = 11;
         MakeMaze myMaze = new MakeMaze(cols, rows);
         PrintMaze print = new PrintMaze();
-        print.PrintInConsole(myMaze.getMaze(), rows, cols);
-        print.PrintJustNumbers(myMaze.getMaze(), rows, cols);
+        print.PrintInConsole(myMaze.getMaze());
+        print.PrintJustNumbers(myMaze.getMaze());
+        print.SaveAsImage(myMaze.getMaze());
     }
 }
 
