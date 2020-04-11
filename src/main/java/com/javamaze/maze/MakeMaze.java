@@ -32,6 +32,8 @@ public class MakeMaze {
         int unique = 1;
         int[][] maze = new int[cols][rows];
         int[][] part = new int[cols][2];
+        //part[col][0] stores a set
+        //part[col][1] stores info about walls (0,1,2,3):
         //0=no walls, 1=right wall, 2=bottom wall, 3=right+bottom walls
 
         int x;
@@ -62,8 +64,8 @@ public class MakeMaze {
 
             //create bottom walls
             int a;
-            int haveBot = 0;
-            int inSet = 0;
+            int haveBot = 0;//elements that have a bottom wall in a row in one set
+            int inSet = 0;//members of set in a row
             for (x = 0; x < cols; x++) {
                 for (a = 0; a < cols; a++) {
                     if (part[x][0] == part[a][0]) {
@@ -79,7 +81,9 @@ public class MakeMaze {
                 inSet = 0;
                 haveBot = 0;
             }
-
+            
+            //write data from 2nd row to the 1st row
+            //generating that way is much better than store one big matrix
             if (y != rows - 1) {
                 for (int e = 0; e < cols; e++) {
                     maze[e][y] = part[e][1];
@@ -89,23 +93,30 @@ public class MakeMaze {
                     part[e][1] = 0;
                 }
             } else {
-                for (int f = 0; f < cols - 1; f++) {//last row
+                //last row - end the maze
+                for (int f = 0; f < cols - 1; f++) {
+                    //remove some right walls
+                    if (part[f][0] != part[f + 1][0]) {
+                        if ((part[f][1] == 3) || (part[f][1] == 1)) {
+                            part[f][1]--; 
+                        }
+                        //union the sets
+                        int search = part[f+1][0];
+                        for (int aa=0; aa < cols; aa++)
+                        {
+                            if (part[aa][0]==search)
+                                part[aa][0]=part[f][0];
+                        }
+                    }
+                    //add a bottom wall to every cell
                     if (part[f][1] < 2) {
                         part[f][1] += 2;
                     }
-
-                    if (part[f][0] != part[f + 1][0]) {
-                        if (part[f][1] == 3) {
-                            part[f][1]--;
-                        }
-                        part[f + 1][0] = part[f][0];
-                    }
+                    
                     maze[f][y] = part[f][1];
                 }
-                if (part[cols - 1][1] < 2) {
-                    part[cols - 1][1] += 2;
-                }
-                maze[cols - 1][y] = part[cols - 1][1];
+                //add right and bottom wall to last element
+                maze[cols - 1][y] = 3;
             }
         }
 
@@ -122,7 +133,7 @@ public class MakeMaze {
             }
         }
 
-        //add left wall
+        //add left walls everywhere
         for (int h = 1; h < height; h++) {
             maze2[0][h] = 1;
         }
