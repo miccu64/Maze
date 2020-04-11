@@ -3,8 +3,8 @@ package com.javamaze.maze;
 public class Main {
 
     public static void main(String[] args) {
-        int cols = 22;
-        int rows = 11;
+        int cols = 111;
+        int rows = 111;
         MakeMaze myMaze = new MakeMaze(cols, rows);
         PrintMaze print = new PrintMaze();
         print.PrintInConsole(myMaze.getMaze());
