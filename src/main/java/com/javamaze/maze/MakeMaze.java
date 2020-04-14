@@ -124,7 +124,7 @@ public class MakeMaze {
         int width = cols + 1;
         int height = rows + 1;
         int[][] maze2 = new int[width][height];
-        int num = RandomInt(1, width);
+        int num = RandomInt(1, width-1);
 
         //add top wall with one hole
         for (int g = 1; g < width; g++) {
