@@ -103,16 +103,57 @@ public class PrintMaze {
             System.out.print("Error!");
         }
     }
-    
-    //print path in console
-    public void PrintSolutionInConsole(ArrayList<Cell> path, int cols, int rows)
-    {
-        int[][] sol = new int[cols][rows];
-        for (Cell cc : path)
+
+    private Graphics2D PathBlock(Graphics2D g, int x, int y, boolean vert) {
+        g.setColor(Color.blue);
+        if (vert)//add vertical block
         {
-            sol[cc.x][cc.y]=cc.d;
+            g.fillRect(16 * x + 2, 16 * y + 2, 14, 30);
+        } else {
+            g.fillRect(16 * x + 2, 16 * y + 2, 30, 14);//add horizontal block
         }
-        
+        return g;
+    }
+    
+    public void SaveAsImageResolved(ArrayList<Cell> Path, int cols, int rows) {
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File("MazeUnresolved.png"));
+        } catch (IOException e) {
+            System.out.print("Can't open specified file!");
+        }
+        Graphics2D graph = img.createGraphics();//graphics to draw in buffered image
+
+        Cell cc=Path.get(0);//current cell
+        for (int a=1; a<Path.size(); a++)
+        {
+            Cell nc=Path.get(a);//next cell
+            if (cc.x==nc.x-1)//left
+                PathBlock(graph, cc.x, cc.y, false);
+            else if (cc.x==nc.x+1)//right
+                PathBlock(graph, nc.x, nc.y, false);
+            else if (cc.y==nc.y+1)//up
+                PathBlock(graph, nc.x, nc.y, true);
+            else if (cc.y==nc.y-1)//down
+                PathBlock(graph, cc.x, cc.y, true);
+            cc=nc;
+        }
+        graph.dispose();//release resources
+        File file = new File("MazeResolved.png");//make file
+        try {
+            ImageIO.write(img, "png", file);
+        } catch (IOException ex) {
+            System.out.print("Error!");
+        }
+    }
+
+    //print path in console
+    public void PrintSolutionInConsole(ArrayList<Cell> path, int cols, int rows) {
+        int[][] sol = new int[cols][rows];
+        for (Cell cc : path) {
+            sol[cc.x][cc.y] = cc.d;
+        }
+
         System.out.print("\n\n");
         for (int y = 0; y < rows; ++y) {
             for (int x = 0; x < cols; ++x) {

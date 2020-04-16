@@ -10,8 +10,8 @@ public class Main {
         MakeMaze myMaze = new MakeMaze(cols, rows);
         PrintMaze print = new PrintMaze();
         int maze[][]=myMaze.getMaze();
-        print.PrintJustNumbers(maze);
-        print.PrintInConsole(maze);
+        //print.PrintJustNumbers(maze);
+        //print.PrintInConsole(maze);
         
         print.SaveAsImage(maze);
         
@@ -27,8 +27,8 @@ public class Main {
         MazeSolver solve = new MazeSolver();
         solve.SolveMaze(maze,sx,1,tx,rows);
         ArrayList<Cell> path = solve.GetPath();
-        print.PrintSolutionInConsole(path,cols+1,rows+1);
-        
+        //print.PrintSolutionInConsole(path,cols+1,rows+1);
+        print.SaveAsImageResolved(path,cols,rows);
     }
 }
 
