@@ -1,10 +1,12 @@
 package com.javamaze.maze;
 
+import java.util.ArrayList;
+
 public class Main {
 
     public static void main(String[] args) {
-        int cols = 11;
-        int rows = 11;
+        int cols = 111;
+        int rows = 111;
         MakeMaze myMaze = new MakeMaze(cols, rows);
         PrintMaze print = new PrintMaze();
         int maze[][]=myMaze.getMaze();
@@ -24,6 +26,9 @@ public class Main {
         }
         MazeSolver solve = new MazeSolver();
         solve.SolveMaze(maze,sx,1,tx,rows);
+        ArrayList<Cell> path = solve.GetPath();
+        print.PrintSolutionInConsole(path,cols+1,rows+1);
+        
     }
 }
 

@@ -2,48 +2,133 @@ package com.javamaze.maze;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Queue;
+import java.util.Random;
 
 public class MazeSolver {
 
-    private void FindWay(ArrayList<Cell> ways, int distance)
+    private final ArrayList<Cell> Path = new ArrayList<>();
+    
+    public ArrayList<Cell> GetPath()
     {
-        int[][] v = new int[12][12];
+        return Path;
+    }
+    
+    private boolean FindPath(int distance[][], int col, int row, int where, int[][] maze) {
+        int xmax = distance.length - 1;
+        int ymax = distance[0].length - 1;
+        switch (where) {
+            case 0://move down
+                if (row < ymax) {
+                    if ((distance[col][row]==(distance[col][row+1]+1)) && (maze[col][row])<2) {
+                        return true;
+                    }
+                }
+                break;
+            case 1://move left
+                if (col > 1) {
+                    if ((distance[col][row]==(distance[col-1][row]+1)) && (maze[col-1][row]!=1) && (maze[col-1][row]!=3)) {
+                        return true;
+                    }
+                }
+                break;
+            case 2://move right
+                if (col < xmax) {
+                    if ((distance[col][row]==(distance[col+1][row]+1)) && (maze[col][row]!=1) && (maze[col][row]!=3)) {
+                        return true;
+                    }
+                }
+                break;
+            case 3://move up
+                if (row > 1) {
+                    if ((distance[col][row]==(distance[col][row-1]+1)) && (maze[col][row-1]<2)) {
+                        return true;
+                    }
+                }
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
+    
+    private int RandomDirection() {
+        Random rand = new Random();
+        
+        return rand.nextInt(4);
+    }
+    
+    private void FindWay(ArrayList<Cell> ways, int cols, int rows, int[][] maze)
+    {
+        int[][] distance = new int[cols][rows];
         int len=ways.size();//length of arraylist
         
         for(int a=len-1; a>=0; a--)
         {
-            v[ways.get(a).x][ways.get(a).y]=ways.get(a).d;
+            distance[ways.get(a).x][ways.get(a).y]=ways.get(a).d;
         }
-        
-        for(int c=0;c<=11;c++)
+        /*
+        for(int c=0;c<rows;c++)//print how program works
         {
-            for(int b=0;b<=11;b++)
+            for(int b=0;b<cols;b++)
             {
-                System.out.print(v[b][c]);
+                System.out.print(distance[b][c]);
                 System.out.print("\t");
             }
             System.out.print("\n");
-        }
+        }*/
         System.out.print("\n");
-        System.out.print(ways.get(ways.size() - 1).d);
-        ArrayList<Cell> result = new ArrayList<>();
         
-        int tx=ways.get(len-1).x;
-        int ty=ways.get(len-1).y;
-        int td=ways.get(len-1).d;
+        int tx=ways.get(len-1).x;//x of target 
+        int ty=ways.get(len-1).y;//y of target 
+        int td=ways.get(len-1).d;//distance of target 
+        Path.add(new Cell(tx,ty,td));//add final point to path
         
-        
-        for (int g=len-1; g<0; g++)
-        {
-            Cell current=ways.get(g);
-            for (int dir=0; dir<4; dir++)
-            {
-                Cell next=ways.get(g-1);
-            }
+        //list with directions to make them randomly chosen
+        ArrayList<Integer> direction = new ArrayList<>();
+        for (int i=0; i<4; i++) {
+            direction.add(i);
         }
+        boolean found=false;
         
-        
+        int cx=tx;//current x
+        int cy=ty;//current y
+        for (int cd=td-1; cd>0; cd--)//cd - current distance
+        {
+            found=false;
+            Collections.shuffle(direction);//random direction
+            for (int dir : direction)
+            {
+                //find neighbour element with distance smaller by 1
+                if(FindPath(distance,cx,cy,dir,maze)==true)
+                {
+                    switch(dir) {
+                        case 0://move down
+                            cy+=1;
+                            break;
+                        case 1://move left
+                            cx-=1;
+                            break;
+                        case 2://move right
+                            cx+=1;
+                            break;
+                        case 3://move up
+                            cy-=1;
+                            break;
+                    }
+                    Path.add(new Cell(cx,cy,cd));//add to path
+                    found=true;
+                    break;
+                }
+            }
+            if(found==false)
+            {
+                Path.clear();
+                FindWay(ways, cols, rows, maze);
+                return;
+            }
+        }   
     }
     
     private boolean isMovePossible(int maze[][], boolean visited[][], int col, int row, int where) {
@@ -153,6 +238,6 @@ public class MazeSolver {
             System.out.print("Nie znaleziono sciezki!");
         }
         
-        FindWay(ways,mind);
+        FindWay(ways,cols,rows,maze);//reconstruct shortest way
     }
 }

@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class PrintMaze {
@@ -46,6 +47,7 @@ public class PrintMaze {
     }
 
     public void PrintJustNumbers(int[][] maze) {
+        System.out.println("Info about walls: ");
         int cols = maze.length;
         int rows = maze[0].length;
         System.out.print("\n\n");
@@ -99,6 +101,24 @@ public class PrintMaze {
         } catch (IOException ex) {
             //Logger.getLogger(PrintMaze.class.getName()).log(Level.SEVERE, null, ex);
             System.out.print("Error!");
+        }
+    }
+    
+    //print path in console
+    public void PrintSolutionInConsole(ArrayList<Cell> path, int cols, int rows)
+    {
+        int[][] sol = new int[cols][rows];
+        for (Cell cc : path)
+        {
+            sol[cc.x][cc.y]=cc.d;
+        }
+        
+        System.out.print("\n\n");
+        for (int y = 0; y < rows; ++y) {
+            for (int x = 0; x < cols; ++x) {
+                System.out.print(sol[x][y] + "\t");
+            }
+            System.out.print("\n");
         }
     }
 }
