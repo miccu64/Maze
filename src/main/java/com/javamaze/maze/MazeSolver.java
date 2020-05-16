@@ -1,5 +1,8 @@
 package com.javamaze.maze;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,13 +10,21 @@ import java.util.Queue;
 
 public class MazeSolver {
 
+static final Logger logger = LogManager.getLogger(MazeSolver.class);
+
     private final ArrayList<Cell> Path = new ArrayList<>();
 
     public ArrayList<Cell> GetPath() {
         return Path;
     }
 
+
+
     private boolean FindPath(int distance[][], int col, int row, int where, int[][] maze) {
+
+
+        // logger.entry();
+
         int xmax = distance.length - 1;
         int ymax = distance[0].length - 1;
         switch (where) {
@@ -220,11 +231,15 @@ public class MazeSolver {
             }
         }
         if (mind != 0) {
+            logger.info("Dlugosc najkrotszej drogi: " + (mind + 1));
             System.out.print("Dlugosc najkrotszej drogi: " + (mind + 1));
         } else {
+            logger.info("Nie znaleziono sciezki!");
             System.out.print("Nie znaleziono sciezki!");
         }
 
         FindWay(ways, cols, rows, maze);//reconstruct shortest way
+       
+        
     }
 }
