@@ -7,8 +7,8 @@ public class DatabaseMaze {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DATABASE_URL = "jdbc:mysql://localhost/DatabaseMaze?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
-    static final String USER = "root";
-    static final String PASSWORD = "archer";
+    static final String USER = "";
+    static final String PASSWORD = "";
 
 
         public int[][] readMazeDb(int id) throws ClassNotFoundException, SQLException, java.io.IOException {
