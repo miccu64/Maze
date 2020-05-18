@@ -3,7 +3,7 @@ package com.javamaze.maze;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
-
+import java.util.Date;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +17,7 @@ public class Main {
   private static final Logger logger = LogManager.getLogger(Main.class);
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
 
        logger.trace("Entering application.");
         int cols = 111;
@@ -25,11 +25,21 @@ public class Main {
         MakeMaze myMaze = new MakeMaze(cols, rows);
         PrintMaze print = new PrintMaze();
         int maze[][]=myMaze.getMaze();
-        //print.PrintJustNumbers(maze);
-        //print.PrintInConsole(maze);
-     
- 
-     
+        // int maze[][]=new int[rows][cols];
+
+
+
+
+
+DatabaseMaze mazeDb = new DatabaseMaze();
+mazeDb.writeMazeDb(cols,rows,maze);
+try{
+maze = mazeDb.readMazeDb(2);
+
+}        catch (Exception e) {
+            e.printStackTrace();
+        } 
+
         
  
         print.SaveAsImage(maze);
@@ -60,6 +70,9 @@ public class Main {
     }
 }
 
+
+ 
+  
 
 class ImageViewerFrame extends JFrame
 {
@@ -133,5 +146,10 @@ class ImageViewerFrame extends JFrame
       var exitItem = new JMenuItem("Exit");
       menu.add(exitItem);
       exitItem.addActionListener(event -> System.exit(0));
+
+
+
+
+
    }
 }
