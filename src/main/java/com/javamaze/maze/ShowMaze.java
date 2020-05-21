@@ -1,51 +1,87 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.javamaze.maze;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-
-/**
- *
- * @author Krokodyl
- */
-public class ShowMaze extends javax.swing.JPanel {
+public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
+//componentListener listens to changes in size of window, then resize image
 
     private Image image;
+    private Image imageOriginal;
+    private Dimension newSize;
+    private File imageFile = new File("MazeResolved.png");
+    private int inset;//size of top title panel
+    private int x1=-1, x2=-1, y1=-1, y2=-1;
+    private int[][] maze;
+    private int size;//size of image
 
-    public ShowMaze() {
-        initComponents();
-        File imageFile = new File("MazeResolved.png");
-          
-        try {
- 			image = ImageIO.read(imageFile);
- 		} catch (IOException e) {
- 			System.err.println("Blad odczytu obrazka");
- 			e.printStackTrace();
- 		}
-        
-        //Dimension dimension = new Dimension(image.getWidth(), image.getHeight());
- 	//	setPreferredSize(dimension);
-           //image = image.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-          //image = ImageIO.read(img);
-       
-       //Dimension dimension = new Dimension(image.getWidth(), image.getHeight());
-        //setPreferredSize(dimension);
+    @Override public void componentHidden(ComponentEvent e) {}
+    @Override public void componentMoved(ComponentEvent e) {}
+    @Override public void componentShown(ComponentEvent e) {}
+    @Override public void componentResized(ComponentEvent e) {
+        newSize = e.getComponent().getBounds().getSize();
+        //resize showed image from imageOriginal
+        if (newSize.getHeight() < newSize.getWidth()) {
+            size = (int) newSize.getHeight() - inset;
+        } else {
+            size = (int) newSize.getWidth();
+        }
+        image = imageOriginal.getScaledInstance(size, size, Image.SCALE_DEFAULT);
+        //TODO: LEPSZE SKALOWANIE, skalowanie po kliknięciu
     }
 
+    private int ScaleCoords(int num) {
+        
+        return 0;
+    }
+    
+    public ShowMaze(int ins, int[][] myMaze) {
+        maze = myMaze;
+        inset = ins;
+        initComponents();
+        try {
+            image = ImageIO.read(imageFile);
+            imageOriginal = ImageIO.read(imageFile);
+        } catch (IOException e) {
+            System.err.println("Error while loading maze!");
+            e.printStackTrace();
+        }
+        addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if(x1<0) {
+                        x1=e.getX();
+                        y1=e.getY();
+                    } else if(x2<0) {
+                        x2=e.getX();
+                        y2=e.getY();
+                        //wywolac
+                        MazeSolver solve = new MazeSolver();
+                        solve.SolveMaze(maze,x1,y1,x2,y2);
+                        //init again values with -1
+                        x1=x2=y1=y2=-1;
+                    }
+                    int x=e.getX();
+                    int y=e.getY();
+                    
+                    System.out.println(x+","+y);//these co-ords are relative to the component
+                }
+            });
+        
+    }
+    //show image
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 200, 0, this);           
+        g.drawImage(image, 0, 0, this);
     }
 
     /**

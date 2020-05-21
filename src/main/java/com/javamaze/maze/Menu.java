@@ -6,11 +6,11 @@
 package com.javamaze.maze;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Insets;
 import java.util.Random;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 /**
  *
@@ -70,7 +70,7 @@ public class Menu extends javax.swing.JFrame {
         jButton2.setText("Generate maze");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                generateMazeActionPerformed(evt);
             }
         });
 
@@ -150,39 +150,28 @@ public class Menu extends javax.swing.JFrame {
         heightField.setText(String.valueOf(num));
     }//GEN-LAST:event_randomActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void generateMazeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateMazeActionPerformed
         int cols = Integer.parseInt(widthField.getText());
         int rows = Integer.parseInt(heightField.getText());
         GenSaveSolve doIt = new GenSaveSolve(cols, rows);
 
         EventQueue.invokeLater(() -> {
-            //var frame = new GeneratedMaze();
             JFrame frame = new JFrame();
             frame.setTitle("Maze generator");
-
-            ShowMaze show = new ShowMaze();
-
+            //get heigth of top title panel of window
+            Insets insets = this.getInsets();
+            
+            //show maze in JFrame using JPanel
+            ShowMaze show = new ShowMaze(insets.top+insets.left, doIt.GetMaze());//JPanel
+            //listener changing size of image
+            frame.addComponentListener(show);
             frame.setLayout(new BorderLayout());
             frame.add(show, BorderLayout.CENTER);
+            frame.setMinimumSize(new Dimension(400, 300));
             frame.setVisible(true);
             frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            /*
-         //ImageIcon icon = new ImageIcon(getClass().getResource("MazeUnresolved.png"));
-                //JFrame frame = new JFrame();
-                ImageIcon icon = new ImageIcon("MazeUnresolved.png");
-                JLabel label = new JLabel(icon);
-
-                frame.add(label);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-                System.out.print("aaa");
-         
-             */
-            //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            //frame.setVisible(true);
         });
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_generateMazeActionPerformed
 
     /**
      * @param args the command line arguments

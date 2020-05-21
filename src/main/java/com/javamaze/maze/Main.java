@@ -30,7 +30,7 @@ public class Main {
 
 
 
-
+/*
 DatabaseMaze mazeDb = new DatabaseMaze();
 mazeDb.writeMazeDb(cols,rows,maze);
 try{
@@ -58,7 +58,7 @@ maze = mazeDb.readMazeDb(2);
         ArrayList<Cell> path = solve.GetPath();
         //print.PrintSolutionInConsole(path,cols+1,rows+1);
         print.SaveAsImageResolved(path,cols,rows);
-
+*/
         EventQueue.invokeLater(() -> {
          var frame = new Menu();
          frame.setTitle("Maze generator");
