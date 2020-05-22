@@ -220,7 +220,7 @@ public class MazeSolver {
             }
         }
         if (mind != 0) {
-            System.out.print("Dlugosc najkrotszej drogi: " + (mind + 1));
+            System.out.print("Length of the shortest path: " + (mind + 1));
         } else {
             System.out.print("Nie znaleziono sciezki!");
         }

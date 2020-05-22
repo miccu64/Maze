@@ -19,23 +19,25 @@ public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
     private Dimension newSize;
     private File imageFile = new File("MazeResolved.png");
     private int inset;//size of top title panel
-    private int x1=-1, x2=-1, y1=-1, y2=-1;
+    private double x1=-1, x2=-1, y1=-1, y2=-1;
     private int[][] maze;
-    private int size;//size of image
+    private double scale;//scale for fitting image
 
     @Override public void componentHidden(ComponentEvent e) {}
     @Override public void componentMoved(ComponentEvent e) {}
     @Override public void componentShown(ComponentEvent e) {}
     @Override public void componentResized(ComponentEvent e) {
         newSize = e.getComponent().getBounds().getSize();
-        //resize showed image from imageOriginal
-        if (newSize.getHeight() < newSize.getWidth()) {
-            size = (int) newSize.getHeight() - inset;
-        } else {
-            size = (int) newSize.getWidth();
-        }
-        image = imageOriginal.getScaledInstance(size, size, Image.SCALE_DEFAULT);
-        //TODO: LEPSZE SKALOWANIE, skalowanie po kliknięciu
+        //-200 is a offset for buttons etc.
+        double size2=(newSize.getWidth()-200)/imageOriginal.getWidth(this);
+        double size3=(newSize.getHeight() - inset)/imageOriginal.getHeight(this);
+        if (size2<size3)
+            scale=size2;
+        else scale=size3; 
+        //scaled dimensions of image
+        double sc1 = scale*imageOriginal.getWidth(this);
+        double sc2 = scale*imageOriginal.getHeight(this);
+        image = imageOriginal.getScaledInstance((int) sc1,(int) sc2, Image.SCALE_DEFAULT);
     }
 
     private int ScaleCoords(int num) {
@@ -58,24 +60,19 @@ public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     if(x1<0) {
-                        x1=e.getX();
-                        y1=e.getY();
+                        x1=e.getX()*scale/16;
+                        y1=e.getY()*scale/16;
                     } else if(x2<0) {
-                        x2=e.getX();
-                        y2=e.getY();
-                        //wywolac
+                        x2=e.getX()*scale/16;
+                        y2=e.getY()*scale/16;
+                        System.out.println((int)x1 + " "+(int)y1 + " "+(int)x2 + " "+(int)y2);
                         MazeSolver solve = new MazeSolver();
-                        solve.SolveMaze(maze,x1,y1,x2,y2);
+                        solve.SolveMaze(maze,(int)x1,(int)y1,(int)x2,(int)y2);
                         //init again values with -1
                         x1=x2=y1=y2=-1;
                     }
-                    int x=e.getX();
-                    int y=e.getY();
-                    
-                    System.out.println(x+","+y);//these co-ords are relative to the component
                 }
-            });
-        
+            });      
     }
     //show image
     @Override
