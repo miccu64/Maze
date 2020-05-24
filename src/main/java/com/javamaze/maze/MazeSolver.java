@@ -13,9 +13,14 @@ public class MazeSolver {
 static final Logger logger = LogManager.getLogger(MazeSolver.class);
 
     private final ArrayList<Cell> Path = new ArrayList<>();
-
+    private int mind;//minimum distance
+    
     public ArrayList<Cell> GetPath() {
         return Path;
+    }
+    
+    public int GetMinLength() {
+        return mind;
     }
 
 
@@ -182,7 +187,7 @@ static final Logger logger = LogManager.getLogger(MazeSolver.class);
         int sx = sx1;
         int sy = sy1;
         int d = 1;//distance
-        int mind = 0;//minimum distance
+        mind = 0;//minimum distance
         //add starting point to queue and set as visited
         visited[sx][sy] = true;
         q.add(new Cell(sx, sy, d));

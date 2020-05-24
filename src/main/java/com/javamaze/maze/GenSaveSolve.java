@@ -6,8 +6,9 @@ import java.util.ArrayList;
 
 public class GenSaveSolve {
     
-    private int[][] maze;
+    private final int[][] maze;
     private ArrayList<Cell> path = new ArrayList<>();
+    private final int pathLength;
     
     public ArrayList<Cell> GetPath() {
         return path;
@@ -15,6 +16,10 @@ public class GenSaveSolve {
     
     public int[][] GetMaze() {
         return maze;
+    }
+    
+    public int GetPathLength() {
+        return pathLength;
     }
     
     public GenSaveSolve(int cols, int rows) {
@@ -40,6 +45,7 @@ public class GenSaveSolve {
         MazeSolver solve = new MazeSolver();
         solve.SolveMaze(maze,sx,1,tx,rows);
         path = solve.GetPath();
+        pathLength = solve.GetMinLength();
         print.SaveAsImageResolved(solve.GetPath(), true);
     }
 }
