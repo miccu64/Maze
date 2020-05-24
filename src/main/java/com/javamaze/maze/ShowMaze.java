@@ -17,12 +17,28 @@ public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
     private Image image;
     private Image imageOriginal;
     private Dimension newSize;
-    private File imageFile = new File("MazeResolved.png");
     private int inset;//size of top title panel
-    private double x1 = -1, x2 = -1, y1 = -1, y2 = -1;
+    private double x1 = -1, x2 = -1, y1 = -1, y2 = -1;//coordinates
     private int[][] maze;
     private double scale;//scale for fitting image
 
+    //function for rescaling image
+    private void Resized() {
+        //-200 is a offset for buttons etc.
+        double size2 = (newSize.getWidth() - 200) / imageOriginal.getWidth(this);
+        double size3 = (newSize.getHeight() - inset) / imageOriginal.getHeight(this);
+        if (size2 < size3) {
+            scale = size2;
+        } else {
+            scale = size3;
+        }
+        //scaled dimensions of image
+        double sc1 = scale * imageOriginal.getWidth(this);
+        double sc2 = scale * imageOriginal.getHeight(this);
+        image=null;
+        image = imageOriginal.getScaledInstance((int) sc1, (int) sc2, Image.SCALE_DEFAULT);
+    }
+    
     @Override
     public void componentHidden(ComponentEvent e) {
     }
@@ -38,18 +54,7 @@ public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
     @Override
     public void componentResized(ComponentEvent e) {
         newSize = e.getComponent().getBounds().getSize();
-        //-200 is a offset for buttons etc.
-        double size2 = (newSize.getWidth() - 200) / imageOriginal.getWidth(this);
-        double size3 = (newSize.getHeight() - inset) / imageOriginal.getHeight(this);
-        if (size2 < size3) {
-            scale = size2;
-        } else {
-            scale = size3;
-        }
-        //scaled dimensions of image
-        double sc1 = scale * imageOriginal.getWidth(this);
-        double sc2 = scale * imageOriginal.getHeight(this);
-        image = imageOriginal.getScaledInstance((int) sc1, (int) sc2, Image.SCALE_DEFAULT);
+        Resized();
     }
 
     private int ScaleCoords(int num) {
@@ -58,6 +63,7 @@ public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
     }
 
     public ShowMaze(int ins, int[][] myMaze) {
+        File imageFile = new File("MazeResolved.png");
         maze = myMaze;
         inset = ins;
         initComponents();
@@ -69,21 +75,40 @@ public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
             e.printStackTrace();
         }
         addMouseListener(new MouseAdapter() {
+            //scale number of pixels after click
             @Override
             public void mousePressed(MouseEvent e) {
+                //-1, bcs it have +1 special col and row for walls
+                int mazeWidth = maze.length - 1;
+                int mazeHeight = maze[0].length - 1;     
+                  System.out.println(mazeWidth+" "+mazeHeight);
                 if (x1 < 0) {
-                    x1 = e.getX() / 16 / scale;
-                    y1 = e.getY() / 16 / scale;
+                    x1 = Math.round(e.getX() / 16 / scale);
+                    y1 = Math.round(e.getY() / 16 / scale);
+                    System.out.println((x1) + " " + (y1));
+                    if ((x1<1) || (x1>mazeWidth) || (y1<1) || (y1>mazeHeight)) {
+                        x1 = y1 = -1;
+                    }
                 } else if (x2 < 0) {
-                    x2 = e.getX() / 16 / scale;
-                    y2 = e.getY() / 16 / scale;
-                    System.out.println((x1) + " " + (y1) + " " + (x2) + " " + (y2));
-System.out.println(maze.length);
-                    System.out.println(Math.round(x1) + " " + Math.round(y1) + " " + Math.round(x2) + " " + Math.round(y2));
-                    MazeSolver solve = new MazeSolver();
-                    solve.SolveMaze(maze,(int) Math.round(x1), (int) Math.round(y1), (int) Math.round(x2), (int) Math.round(y2));
-                    //init again values with -1
-                    x1 = x2 = y1 = y2 = -1;
+                    x2 = Math.round(e.getX() / 16 / scale);
+                    y2 = Math.round(e.getY() / 16 / scale);
+                    if ((x2<1) || (x2>mazeWidth) || (y2<1) || (y2>mazeHeight)) {
+                        x2 = y2 = -1;
+                    } else {
+                        System.out.println((x1) + " " + (y1) + " " + (x2) + " " + (y2));
+                        System.out.println(Math.round(x1) + " " + Math.round(y1) + " " + Math.round(x2) + " " + Math.round(y2));
+                        MazeSolver solve = new MazeSolver();
+                        solve.SolveMaze(maze,(int) x1, (int) y1, (int) x2, (int) y2);
+                        PrintMaze print = new PrintMaze();
+                        print.SaveAsImageResolved(solve.GetPath(), false);
+                        imageOriginal = print.GetImg();
+                        //resize result and refresh JPanel 
+                        Resized();
+                        revalidate();
+                        repaint();
+                        //init values again with -1
+                        x1 = x2 = y1 = y2 = -1;
+                    }
                 }
             }
         });

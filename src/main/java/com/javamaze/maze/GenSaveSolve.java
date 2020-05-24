@@ -40,6 +40,6 @@ public class GenSaveSolve {
         MazeSolver solve = new MazeSolver();
         solve.SolveMaze(maze,sx,1,tx,rows);
         path = solve.GetPath();
-        print.SaveAsImageResolved(solve.GetPath(), cols, rows);
+        print.SaveAsImageResolved(solve.GetPath(), true);
     }
 }

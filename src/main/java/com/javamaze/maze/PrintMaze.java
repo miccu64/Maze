@@ -10,6 +10,12 @@ import javax.imageio.ImageIO;
 
 public class PrintMaze {
 
+    private BufferedImage img = null;
+    
+    public BufferedImage GetImg() {
+        return img;
+    }
+    
     public void PrintInConsole(int[][] maze) {
         int cols = maze.length;
         int rows = maze[0].length;
@@ -115,8 +121,8 @@ public class PrintMaze {
         return g;
     }
     
-    public void SaveAsImageResolved(ArrayList<Cell> Path, int cols, int rows) {
-        BufferedImage img = null;
+    public void SaveAsImageResolved(ArrayList<Cell> Path, boolean save) {
+        img = null;
         try {
             img = ImageIO.read(new File("MazeUnresolved.png"));
         } catch (IOException e) {
@@ -139,11 +145,13 @@ public class PrintMaze {
             cc=nc;
         }
         graph.dispose();//release resources
-        File file = new File("MazeResolved.png");//make file
-        try {
-            ImageIO.write(img, "png", file);
-        } catch (IOException ex) {
-            System.out.print("Error!");
+        if (save) {
+            File file = new File("MazeResolved.png");//make file
+            try {
+                ImageIO.write(img, "png", file);
+            } catch (IOException ex) {
+                System.out.print("Error!");
+            }
         }
     }
 
