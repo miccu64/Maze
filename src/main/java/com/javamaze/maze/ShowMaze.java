@@ -27,11 +27,11 @@ public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
     private void Resized() {
         //-200 is a offset for buttons etc.
         double size2 = (newSize.getWidth() - 200) / imageOriginal.getWidth(this);
-        double size3 = (newSize.getHeight() - inset) / imageOriginal.getHeight(this);
-        if (size2 < size3) {
+        double size1 = (newSize.getHeight() - inset) / imageOriginal.getHeight(this);
+        if (size2 < size1) {
             scale = size2;
         } else {
-            scale = size3;
+            scale = size1;
         }
         //scaled dimensions of image
         double sc1 = scale * imageOriginal.getWidth(this);

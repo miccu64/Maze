@@ -69,18 +69,20 @@ public class DatabaseMaze {
 }
 
 
-        public void writeMazeDb(int cols,int rows,int[][] maze_data)  {
+        public void writeMazeDb(int[][] maze_data)  {
         Connection conn = null;
         PreparedStatement pstmt = null;
         Statement stmt = null;
         ResultSet rs = null;
+        int cols = maze_data.length;
+        int rows = maze_data[0].length;
         try {
 
 
             StringBuilder builder = new StringBuilder();
-            for(int i = 0; i < maze_data.length; i++)//for each row
+            for(int i = 0; i < cols; i++)//for each row
             {
-                for(int j = 0; j < maze_data.length; j++)//for each column
+                for(int j = 0; j < rows; j++)//for each column
                 {
                     builder.append(maze_data[i][j]+"");//append to the output string
                         if(j < maze_data.length - 1)//if this is not the last row element

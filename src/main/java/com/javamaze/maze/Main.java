@@ -16,7 +16,6 @@ public class Main {
 
   private static final Logger logger = LogManager.getLogger(Main.class);
 
-
     public static void main(String[] args)  {
 
        logger.trace("Entering application.");
@@ -40,24 +39,6 @@ maze = mazeDb.readMazeDb(2);
             e.printStackTrace();
         } 
 
-        
- 
-        print.SaveAsImage(maze);
-        
-        int sx=0;
-        int tx=0;
-        for (int a=1; a<=cols; a++)
-        {
-            if (maze[a][0]==0)
-                sx=a;
-            if (maze[a][rows]<2)
-                tx=a;
-        }
-        MazeSolver solve = new MazeSolver();
-        solve.SolveMaze(maze,sx,1,tx,rows);
-        ArrayList<Cell> path = solve.GetPath();
-        //print.PrintSolutionInConsole(path,cols+1,rows+1);
-        print.SaveAsImageResolved(path,cols,rows);
 */
         EventQueue.invokeLater(() -> {
          var frame = new Menu();
