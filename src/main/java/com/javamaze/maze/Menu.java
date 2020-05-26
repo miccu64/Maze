@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.javamaze.maze;
 
 import java.awt.BorderLayout;
@@ -12,23 +8,32 @@ import java.awt.Insets;
 import java.util.Random;
 import javax.swing.JFrame;
 
-/**
- *
- * @author Krokodyl
- */
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 public class Menu extends javax.swing.JFrame {
 
+
+    private static final Logger logger = LogManager.getLogger(Menu.class);
+
+
     private final DatabaseMaze mazeDb;
+    private final MazeSolver solve; 
     private JFrame frame = null;
     public Menu() {
+
         initComponents();
         mazeDb = new DatabaseMaze();
+        solve = new MazeSolver();
     }
     
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+     
         widthField = new javax.swing.JTextField();
         heightField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -74,9 +79,13 @@ public class Menu extends javax.swing.JFrame {
 
         loadFromDb.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         loadFromDb.setText("Load from database");
-
+        loadFromDb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                readMazeDbActionPerformed(evt);
+            }
+        });
         jLabel3.setText("Size of your maze");
-
+ 
         listOfMazes.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -86,6 +95,11 @@ public class Menu extends javax.swing.JFrame {
 
         delete.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         delete.setText("Delete");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteMazeDbActionPerformed(evt);
+            }
+        });    
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,15 +182,55 @@ public class Menu extends javax.swing.JFrame {
         heightField.setText(String.valueOf(num));
     }//GEN-LAST:event_randomActionPerformed
 
+    private void readMazeDbActionPerformed(java.awt.event.ActionEvent evt) {
+
+           
+
+      int mazeId = 1;
+      logger.trace("Load Maze "+ mazeId +" from Database");
+ GenSaveSolve doIt = new GenSaveSolve(mazeDb.readMazeDb(mazeId));
+
+                EventQueue.invokeLater(() -> {
+            //close child window if exists, then generate new
+            if (frame!=null)
+                frame.dispose();
+            frame = new JFrame();
+            frame.setTitle("Maze solver");
+            //get heigth of top title panel of window
+            Insets insets = this.getInsets();
+            
+            //show maze in JFrame using JPanel
+           
+            ShowMaze show = new ShowMaze(insets.top+insets.left, doIt.GetMaze(), doIt.GetPathLength());//JPanel
+            //listener changing size of image
+            frame.addComponentListener(show);
+            frame.setLayout(new BorderLayout());
+            frame.add(show, BorderLayout.CENTER);
+            frame.setMinimumSize(new Dimension(500, 400));
+            frame.setVisible(true);
+            frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        });
+
+
+    }
+      private void deleteMazeDbActionPerformed(java.awt.event.ActionEvent evt) {
+         
+      int mazeId = 1; 
+      logger.trace("Delete Maze "+ mazeId +" from Database");
+      mazeDb.deleteMazeDb(mazeId);
+      }
+
     private void generateMazeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateMazeActionPerformed
+
+           
         int cols = Integer.parseInt(widthField.getText());
         int rows = Integer.parseInt(heightField.getText());
         //generate and solve maze
-        GenSaveSolve doIt = new GenSaveSolve(cols, rows);
+
+        logger.trace("Generate "+cols+"x"+rows+" Maze");
+        GenSaveSolve doIt = new GenSaveSolve(rows,cols);
         //save maze to database
         mazeDb.writeMazeDb(doIt.GetMaze());
-        
-
         EventQueue.invokeLater(() -> {
             //close child window if exists, then generate new
             if (frame!=null)

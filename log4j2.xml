@@ -14,7 +14,7 @@
 
 
     <Loggers>
-        <Logger name= "com.javamaze.maze.MazeSolver" level="trace" additivity="true">
+        <Logger name= "com.javamaze.maze.Menu" level="trace" additivity="true">
            <AppenderRef ref="Console"/>
            <AppenderRef ref="LogToFile"/>
         </Logger>

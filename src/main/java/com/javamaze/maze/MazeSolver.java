@@ -74,16 +74,7 @@ static final Logger logger = LogManager.getLogger(MazeSolver.class);
         for (int a = len - 1; a >= 0; a--) {
             distance[ways.get(a).x][ways.get(a).y] = ways.get(a).d;
         }
-        /*
-        for(int c=0;c<rows;c++)//print how program works
-        {
-            for(int b=0;b<cols;b++)
-            {
-                System.out.print(distance[b][c]);
-                System.out.print("\t");
-            }
-            System.out.print("\n");
-        }*/
+
         System.out.print("\n");
 
         int tx = ways.get(len - 1).x;//x of target 
