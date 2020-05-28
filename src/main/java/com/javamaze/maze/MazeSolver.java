@@ -10,26 +10,22 @@ import java.util.Queue;
 
 public class MazeSolver {
 
-static final Logger logger = LogManager.getLogger(MazeSolver.class);
+    static final Logger logger = LogManager.getLogger(MazeSolver.class);
 
     private final ArrayList<Cell> Path = new ArrayList<>();
     private int mind;//minimum distance
-    
+
     public ArrayList<Cell> GetPath() {
         return Path;
     }
-    
+
     public int GetMinLength() {
         return mind;
     }
 
-
-
     private boolean FindPath(int distance[][], int col, int row, int where, int[][] maze) {
 
-
         // logger.entry();
-
         int xmax = distance.length - 1;
         int ymax = distance[0].length - 1;
         switch (where) {
@@ -74,8 +70,6 @@ static final Logger logger = LogManager.getLogger(MazeSolver.class);
         for (int a = len - 1; a >= 0; a--) {
             distance[ways.get(a).x][ways.get(a).y] = ways.get(a).d;
         }
-
-        System.out.print("\n");
 
         int tx = ways.get(len - 1).x;//x of target 
         int ty = ways.get(len - 1).y;//y of target 
@@ -228,14 +222,10 @@ static final Logger logger = LogManager.getLogger(MazeSolver.class);
         }
         if (mind != 0) {
             logger.info("Length of the shortest path: " + (mind + 1));
-            System.out.print("Length of the shortest path: " + (mind + 1));
         } else {
             logger.info("Can't find path!");
-            System.out.print("Can't find path!");
         }
 
         FindWay(ways, cols, rows, maze);//reconstruct shortest way
-       
-        
     }
 }

@@ -58,8 +58,9 @@ public class MakeMaze {
                 } else {
                     part[x][1] = 1;//set the wall
                 }
-                if(x==cols-2)
-                    part[x+1][1] = 1;//set the right wall on right side of maze
+                if (x == cols - 2) {
+                    part[x + 1][1] = 1;//set the right wall on right side of maze
+                }
             }
 
             //create bottom walls
@@ -81,7 +82,7 @@ public class MakeMaze {
                 inSet = 0;
                 haveBot = 0;
             }
-            
+
             //write data from 2nd row to the 1st row
             //generating that way is much better than store one big matrix
             if (y != rows - 1) {
@@ -98,21 +99,21 @@ public class MakeMaze {
                     //remove some right walls
                     if (part[f][0] != part[f + 1][0]) {
                         if ((part[f][1] == 3) || (part[f][1] == 1)) {
-                            part[f][1]--; 
+                            part[f][1]--;
                         }
                         //union the sets
-                        int search = part[f+1][0];
-                        for (int aa=0; aa < cols; aa++)
-                        {
-                            if (part[aa][0]==search)
-                                part[aa][0]=part[f][0];
+                        int search = part[f + 1][0];
+                        for (int aa = 0; aa < cols; aa++) {
+                            if (part[aa][0] == search) {
+                                part[aa][0] = part[f][0];
+                            }
                         }
                     }
                     //add a bottom wall to every cell
                     if (part[f][1] < 2) {
                         part[f][1] += 2;
                     }
-                    
+
                     maze[f][y] = part[f][1];
                 }
                 //add right and bottom wall to last element
@@ -124,7 +125,7 @@ public class MakeMaze {
         int width = cols + 1;
         int height = rows + 1;
         int[][] maze2 = new int[width][height];
-        int num = RandomInt(1, width-1);
+        int num = RandomInt(1, width - 1);
 
         //add top wall with one hole
         for (int g = 1; g < width; g++) {
@@ -146,9 +147,9 @@ public class MakeMaze {
         }
 
         //add hole in a bottom wall
-        num = RandomInt(1, width-1);
+        num = RandomInt(1, width - 1);
         maze2[num][height - 1] -= 2;
-        
+
         return maze2;
     }
 }

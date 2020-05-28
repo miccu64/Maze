@@ -58,11 +58,6 @@ public class ShowMaze extends javax.swing.JPanel implements ComponentListener {
         Resized();
     }
 
-    private int ScaleCoords(int num) {
-
-        return 0;
-    }
-
     public ShowMaze(int ins, int[][] myMaze, int len) {
         File imageFile = new File("MazeResolved.png");
         maze = myMaze;

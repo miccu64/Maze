@@ -11,11 +11,11 @@ import javax.imageio.ImageIO;
 public class PrintMaze {
 
     private BufferedImage img = null;
-    
+
     public BufferedImage GetImg() {
         return img;
     }
-    
+
     public void PrintInConsole(int[][] maze) {
         int cols = maze.length;
         int rows = maze[0].length;
@@ -120,7 +120,7 @@ public class PrintMaze {
         }
         return g;
     }
-    
+
     public void SaveAsImageResolved(ArrayList<Cell> Path, boolean save) {
         img = null;
         try {
@@ -130,19 +130,23 @@ public class PrintMaze {
         }
         Graphics2D graph = img.createGraphics();//graphics to draw in buffered image
 
-        Cell cc=Path.get(0);//current cell
-        for (int a=1; a<Path.size(); a++)
-        {
-            Cell nc=Path.get(a);//next cell
-            if (cc.x==nc.x-1)//left
+        Cell cc = Path.get(0);//current cell
+        for (int a = 1; a < Path.size(); a++) {
+            Cell nc = Path.get(a);//next cell
+            if (cc.x == nc.x - 1)//left
+            {
                 PathBlock(graph, cc.x, cc.y, false);
-            else if (cc.x==nc.x+1)//right
+            } else if (cc.x == nc.x + 1)//right
+            {
                 PathBlock(graph, nc.x, nc.y, false);
-            else if (cc.y==nc.y+1)//up
+            } else if (cc.y == nc.y + 1)//up
+            {
                 PathBlock(graph, nc.x, nc.y, true);
-            else if (cc.y==nc.y-1)//down
+            } else if (cc.y == nc.y - 1)//down
+            {
                 PathBlock(graph, cc.x, cc.y, true);
-            cc=nc;
+            }
+            cc = nc;
         }
         graph.dispose();//release resources
         if (save) {
